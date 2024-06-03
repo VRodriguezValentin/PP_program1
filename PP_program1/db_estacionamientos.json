@@ -1,0 +1,74 @@
+[
+    {
+        "nombre": "Boleadoras",
+        "cantidad total parcelas auto": 50,
+        "cantidad total parcelas moto": 100,
+        "cantidad parcelas disponibles auto": 49,
+        "cantidad parcelas disponibles moto": 99,
+        "coste auto": 3.5,
+        "coste moto": 2.0,
+        "vehiculos": [
+            {
+                "patente": "abc-123",
+                "tipo": "auto",
+                "hora_ingreso": "01/06 20:47"
+            },
+            {
+                "patente": "okk-292",
+                "tipo": "moto",
+                "hora_ingreso": "02/06 10:48"
+            }
+        ],
+        "autos": [
+            {
+                "patente": "abc-123",
+                "tipo": "auto",
+                "hora_ingreso": "01/06 20:47"
+            }
+        ],
+        "motos": [
+            {
+                "patente": "okk-292",
+                "tipo": "moto",
+                "hora_ingreso": "02/06 10:48"
+            }
+        ],
+        "recaudacion": 0
+    },
+    {
+        "nombre": "Mate",
+        "cantidad total parcelas auto": 30,
+        "cantidad total parcelas moto": 60,
+        "cantidad parcelas disponibles auto": 29,
+        "cantidad parcelas disponibles moto": 59,
+        "coste auto": 1.5,
+        "coste moto": 1,
+        "vehiculos": [
+            {
+                "patente": "fff-777",
+                "tipo": "moto",
+                "hora_ingreso": "02/06 13:21"
+            },
+            {
+                "patente": "mtx-778",
+                "tipo": "auto",
+                "hora_ingreso": "02/06 20:21"
+            }
+        ],
+        "autos": [
+            {
+                "patente": "mtx-778",
+                "tipo": "auto",
+                "hora_ingreso": "02/06 20:21"
+            }
+        ],
+        "motos": [
+            {
+                "patente": "fff-777",
+                "tipo": "moto",
+                "hora_ingreso": "02/06 13:21"
+            }
+        ],
+        "recaudacion": 0
+    }
+]
