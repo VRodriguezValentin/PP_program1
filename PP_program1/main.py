@@ -18,6 +18,7 @@ def main():
         estacionamiento = est.Estacionamiento(e['nombre'],e['cantidad total parcelas auto'],e['cantidad total parcelas moto'],e['coste auto'],e['coste moto'])
         estacionamiento.cant_parcelas_autos_disponibles = e['cantidad parcelas disponibles auto']
         estacionamiento.cant_parcelas_motos_disponibles = e['cantidad parcelas disponibles moto']
+        estacionamiento.recaudacion = e['recaudacion']
         for vehi in e['vehiculos']:
             vehiculo = v.Vehiculo(vehi['tipo'],vehi['patente'])
             vehiculo.hora_ingreso = vehi['hora_ingreso']
@@ -61,6 +62,7 @@ def main():
                         for e in vector_estacionamientos:
                             print(f'nombre: {e.nombre}, parcelas autos disponibles: {e.cant_parcelas_autos_disponibles}/{e.cant_parcelas_autos_total}, costo autos: {e.coste_hora_auto}, parcelas motos disponibles: {e.cant_parcelas_motos_disponibles}/{e.cant_parcelas_motos_total}, coste motos: {e.coste_hora_moto}')
                         estacionamiento_elegido = input('Seleccione un estacionamiento: ')
+                        estacionamiento_elegido = estacionamiento_elegido.capitalize()
 
                         est_valido = False
                         for e in vector_estacionamientos:
@@ -74,7 +76,7 @@ def main():
                             patente_valida = v.Vehiculo.valida_patente(patente)
                             if patente_valida:
                                 os.system('cls')
-                                tipo = ps.validacion_lista(ps.get_str('Ingrese el tipo de vehiculo: ','¡ERROR! El tipo de vehiculo no es valido.'), tipos, 'tipo')
+                                tipo = ps.validacion_lista(ps.get_str('Ingrese el tipo de vehiculo [auto - moto]: ','¡ERROR! El tipo de vehiculo no es valido.'), tipos, 'tipo')
                                 print(v.Vehiculo.alta_vehiculo(tipo,patente,estacionamiento_validado, vector_estacionamientos))
                                 break
                             else:
@@ -94,6 +96,7 @@ def main():
                         for e in vector_estacionamientos:
                             print(f'nombre: {e.nombre}, parcelas autos disponibles: {e.cant_parcelas_autos_disponibles}/{e.cant_parcelas_autos_total}, costo autos: {e.coste_hora_auto}, parcelas motos disponibles: {e.cant_parcelas_motos_disponibles}/{e.cant_parcelas_motos_total}, coste motos: {e.coste_hora_moto}')
                         estacionamiento_elegido = input('Seleccione un estacionamiento: ')
+                        estacionamiento_elegido = estacionamiento_elegido.capitalize()
 
                         est_valido = False
                         for e in vector_estacionamientos:
@@ -122,9 +125,8 @@ def main():
                                         vehiculo_elegido = dict_vehiculo
                                         break
                                 if patente_egreso_valida:
-                                    reca = estacionamiento_validado.recaudacion
                                     coste_total = v.Vehiculo.baja_vehiculo(estacionamiento_validado, vehiculo_elegido)
-                                    reca += coste_total
+                                    estacionamiento_validado.recaudacion += coste_total
                                     os.system('cls')
                                     print(f'Baja realizada con exito! - Coste final: {coste_total}')
                                     break
@@ -144,6 +146,7 @@ def main():
                         for e in vector_estacionamientos:
                             print(f'nombre: {e.nombre}, parcelas autos disponibles: {e.cant_parcelas_autos_disponibles}/{e.cant_parcelas_autos_total}, costo autos: {e.coste_hora_auto}, parcelas motos disponibles: {e.cant_parcelas_motos_disponibles}/{e.cant_parcelas_motos_total}, coste motos: {e.coste_hora_moto}')
                         estacionamiento_elegido = input('Seleccione un estacionamiento: ')
+                        estacionamiento_elegido = estacionamiento_elegido.capitalize()
 
                         est_valido = False
                         for e in vector_estacionamientos:
@@ -189,7 +192,7 @@ def main():
                     for estacionamient in vector_estacionamientos:
                         lista_patentes = v.Vehiculo.vehiculos_mostrar_patentes(estacionamient, vector_estacionamientos)
                         vector_listas_patentes.append(lista_patentes)
-                    print(vector_listas_patentes)
+                    #print(vector_listas_patentes)
                     i = 0
                     for data in vector_listas_patentes:
                         nombre_estacionamiento = vector_estacionamientos[i].nombre
@@ -201,15 +204,16 @@ def main():
                     print('╔══════════════════════════════════════════════════╗\n\t Recaudacion total\n╚═════════════════════════════════════════════════════╝\n')
                     lista_recaudaciones = []
                     for estacionamiento in vector_estacionamientos:
-                        recau = estacionamiento.recaudacion
+                        #recau = estacionamiento.recaudacion
                         print(f'Recaudacion {estacionamiento.nombre}: {est.Estacionamiento.__len__(estacionamiento)}\n')
-                        lista_recaudaciones.append(recau)
+                        lista_recaudaciones.append(estacionamiento.recaudacion)
                         suma = lambda a,b: a+b
                     resultado = mfrs.my_reduce(suma, lista_recaudaciones)
                     print(f'Total de recaudaciones: {resultado}')
                 case '8':
                     os.system('cls')
                     print('╔══════════════════════════════════════════════════╗\n Filtrar Vehiculos por Minutos Estacionados\n╚═════════════════════════════════════════════════════╝\n')
+                    print('\nOpcion en mantenimiento\n')
                     '''
                     vehiculos_filtrados = []
                     for estacionamiento in vector_estacionamientos:

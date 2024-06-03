@@ -25,7 +25,7 @@ class Vehiculo:
         return(minutos_diferencia)
 
     def valida_patente(patente):
-        patron = r'^[A-Za-z]{3}-\d{3}$'
+        patron = r'^[A-Z]{3}-\d{3}$'
         if re.match(patron, patente):
             return True
         else:
