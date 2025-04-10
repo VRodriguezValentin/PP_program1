@@ -1,161 +1,117 @@
-# 🛒 Sistema de Gestión de Productos Importados
+# 🚗 Sistema de Gestión de Estacionamientos
 
-Este proyecto tiene como objetivo el desarrollo de un sistema completo para la **gestión de productos importados**, incluyendo funcionalidades como el manejo de productos, inventario, depósitos, importaciones, ventas, generación de tickets y logs.
-
----
-
-## 📦 Funcionalidades Principales
-
-- Gestión de productos a importar
-- Control de inventario en tiempo real
-- Manejo de depósitos de almacenamiento
-- Operaciones de importación y venta
-- Generación de tickets de venta en ARS
-- Sistema de logs para auditoría de acciones
+Proyecto para gestionar múltiples estacionamientos con registro de ingresos, egresos, recaudaciones, y más.
 
 ---
 
-## 🧱 PARTE 1 – Gestión de Productos
+## 🧾 Funcionalidades Principales
 
-### 📘 Clase `Producto`
-
-Atributos:
-- `CODIGO`: Formato `NNNN-XX` (validar con regex)
-- `DETALLE`: Nombre del producto (1 a 25 caracteres)
-- `USD_COMPRA`: Precio de importación
-- `USD_VENTA`: Precio de comercialización
-- `PESO`: En gramos
-
-### 📊 Inventario
-
-- `inventario_codigos`: Lista de códigos
-- `inventario_cantidades`: Lista de cantidades (paralela)
+- Alta de estacionamientos
+- Ingreso y egreso de vehículos
+- Control de parcelas disponibles
+- Modificación de tarifas por hora
+- Reportes y listados inteligentes con `map()`, `filter()` y `reduce()`
+- Exportación a JSON y registro en TXT
 
 ---
 
-### 🛠 Funciones
+## 📋 Enunciado / Funciones
 
-#### 1️⃣ `producto_alta(path: str, inv1: list, inv2: list) -> bool`
-- Agrega un nuevo producto si el código no existe
-- Inicializa su inventario en 0
-- 📛 Error: `[ERROR] Ítem existente.`
+### 1️⃣ Nuevo Estacionamiento
 
-#### 2️⃣ `producto_baja(path: str, inv1: list, inv2: list) -> bool`
-- Baja del producto solo si su inventario es cero
-- 📛 Error: `[ERROR] Ítem con stock.`
-
-#### 3️⃣ `producto_modificar_compra(...) / producto_modificar_venta(...)`
-- Permiten modificar los precios de compra o venta
-- Valida precios positivos
-
-#### 4️⃣ `producto_listar(path: str, inv1: list, inv2: list)`
-- Lista los productos activos con la info clave:
+- Alta con ID (nombre único)
+- Validación: nombre único, tarifas como `float > 0`, parcelas como `int > 0`
+- Estructura:
+```python
+[{'objeto': Vehículo, 'hora_ingreso': HH:MM}, {...}]
 ```
-[CODIGO] [DETALLE] [PRECIO COMPRA] [PRECIO VENTA] [CANTIDAD EN INVENTARIO]
-```
+
+### 2️⃣ Ingreso de Vehículo
+
+- Selección de estacionamiento
+- Creación de objeto `Vehículo` con patente y tipo
+- Se descuenta una parcela disponible
+- Se registra `hora_ingreso`
+
+### 3️⃣ Egreso de Vehículo
+
+- Se selecciona el vehículo en lista
+- Se libera la parcela
+- Se calcula tiempo total usando `datetime`
+- Se calcula importe a pagar
+
+### 4️⃣ Modificar Costes por Hora
+
+- Se permite modificar:
+  - `coste_hora_auto`
+  - `coste_hora_moto`
+- Validación: flotantes positivos
+
+### 5️⃣ Listar Vehículos Estacionados
+
+- Utiliza `map()` para aplicar función a cada vehículo
+- Muestra datos como patente, tipo, y hora de ingreso
+
+### 6️⃣ Ordenar Vehículos por Patente
+
+- Ordena de forma **descendente** las patentes estacionadas por establecimiento
 
 ---
 
-## 🧱 PARTE 2 – Gestión de Depósitos e Importación/Venta
+## 💰 Recaudación y Reportes Avanzados
 
-### 🏢 Clase `Deposito`
+### 7️⃣ Recaudación Total
 
-Atributos:
-- `ID`: Autoincremental
-- `CAPACIDAD`: Total máxima de unidades
-- `STOCK`: Lista de diccionarios `{ "ítem": codigo, "cantidad": x }`
+- Usa `reduce()` para sumar la recaudación de **todos los estacionamientos**
 
-🔁 Redefine `__len__()` para retornar **capacidad disponible**
+### 8️⃣ Vehículos +60 min
 
----
+- Usa `filter()` para mostrar solo los vehículos con tiempo > 60 min estacionados
 
-### 🧑‍💼 Clase `Gestion`
+### 9️⃣ Guardar en JSON
 
-#### ✅ `importar(...)`
-- Elige producto y cantidad a importar
-- Actualiza inventario y asigna a depósitos
-- Si un depósito no tiene espacio, distribuye el excedente a uno nuevo
-- Guarda en `DEPOSITOS.json`
-
-#### 🛍️ `vender(...)`
-- Valida CUIT (`NN-NNNNNNNN-N`)
-- Actualiza inventario y depósitos
-- Elimina depósitos vacíos
-- Llama a `generar_ticket(...)`
-
-#### 🧾 `generar_ticket(cotizacion: float, ...)`
-- Imprime ticket en consola y lo guarda en `ventas.txt`
-- Contenido del ticket:
+- Toda la estructura de estacionamientos se guarda en:
 ```
-[VENTA dd/mm/yyyy hh:mm]
-CUIT COMPRADOR:
-DETALLE PRODUCTO:
-CANTIDAD VENDIDA:
-IMPORTE USD:
-IMPORTE ARS:
-COTIZACIÓN DEL DÍA:
+db_estacionamientos.json
+```
+- Al iniciar el programa, se debe cargar la data desde ese archivo
+
+### 🔟 Ver Log de Ingresos/Egresos
+
+- Registro de actividad en archivo `log_estacionamientos.txt`
+
+#### Formato Ingreso:
+```
+[Patente: XXX-NNN] [Hora ingreso: DD-MM-YYYY HH:MM]
 ```
 
-#### 🧠 `log(mensaje: str)`
-- Guarda acciones o errores en formato:
+#### Formato Egreso:
 ```
-dd/mm/yyyy hh:mm : mensaje
+[Patente: XXX-NNN] [Hora ingreso: DD-MM-YYYY HH:MM] [Hora egreso: DD-MM-YYYY HH:MM] [Importe]
 ```
 
 ---
 
-## 📋 Funciones Adicionales
+## 🎓 Condiciones de Aprobación
 
-### 6️⃣ Importar Producto  
-Usa: `Gestion.importar(...)`
-
-### 7️⃣ Vender Producto  
-Usa: `Gestion.vender(...)`
-
-### 8️⃣ Listar Depósitos  
-`deposito_listar(...)`  
-Ejemplo:
-```
-ID 1000 - 150/1000 - Disponible 850
-ID 1001 - 250/900 - Disponible 650
-```
-
-### 9️⃣ Producto con Menos Stock
-Ejemplo:
-```
-[PRODUCTO 5547-AF]
-TOTAL STOCK: 150
-Depósito 1: 75
-Depósito 3: 25
-Depósito 5: 50
-```
-
-### 🔟 Filtrar Productos por Precio Medio
-- Lista productos con precio de **compra menor** al promedio de precios de **venta**
-
-### 1️⃣1️⃣ Ordenar Depósitos por Peso Total
-- Ordena depósitos según el peso total contenido
-
----
-
-## 📂 Archivos Utilizados
-
-- `DB_PRODUCTOS.csv`: Base de productos
-- `DEPOSITOS.json`: Estado de depósitos
-- `ventas.txt`: Histórico de ventas
+| Nota | Requisitos |
+|------|------------|
+| 4    | Punto 1 al 6 |
+| 6+   | Punto 7 al 10 |
 
 ---
 
 ## 🧪 Requisitos Técnicos
 
 - Python 3.10+
-- Manejo de archivos CSV / JSON / TXT
-- Expresiones regulares para validaciones
+- Uso de funciones de orden superior (`map`, `filter`, `reduce`)
+- Manejo de archivos JSON y TXT
+- Validaciones y estructura orientada a objetos
 
 ---
 
-## 🚀 ¡A construir!
+## 🏁 ¡Manos a la obra!
 
-Este sistema es modular y puede ser ampliado fácilmente. Ideal para implementar interfaces gráficas o adaptarlo a una base de datos real en el futuro.
+Este sistema puede ser fácilmente extendido con interfaces gráficas, base de datos relacional o conexión en red.
 
 ---
